@@ -1,0 +1,15 @@
+#!/bin/bash
+hostname puppet.example.com
+wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb -O /tmp/puppetlabs-release-trusty.deb
+dpkg -i /tmp/puppetlabs-release-trusty.deb
+apt-get update
+apt-get install puppetmaster-passenger -y
+sed --in-place '/templatedir/ d' /etc/puppet/puppet.conf
+wget https://s3.amazonaws.com/quickstart-reference/puppet/latest/scripts/autosign.conf -O /etc/puppet/autosign.conf
+wget https://s3.amazonaws.com/quickstart-reference/puppet/latest/scripts/site.pp -O /etc/puppet/manifests/site.pp
+mkdir -p /etc/puppet/modules/lampserver/manifests
+mkdir -p /etc/puppet/modules/iisserver/manifests
+wget https://s3.amazonaws.com/quickstart-reference/puppet/latest/scripts/lampserver/init.pp -O /etc/puppet/modules/lampserver/manifests/init.pp
+wget https://s3.amazonaws.com/quickstart-reference/puppet/latest/scripts/iisserver/init.pp -O /etc/puppet/modules/iisserver/manifests/init.pp
+puppet module install puppetlabs-powershell
+puppet module install puppet-windowsfeature
